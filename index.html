@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waktu Hingga Makan Jake Berikutnya</title>
+    <!-- Mengimpor Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* CSS khusus untuk styling */
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Waktu Hingga Makan Jake Berikutnya</h2>
+        <p>Masukkan waktu saat ini (hh:mm AM/PM):</p>
+        <div class="form-group">
+            <input type="text" class="form-control" id="currentTime" placeholder="Contoh: 2:00 PM">
+        </div>
+        <button class="btn btn-primary" onclick="calculateTimeUntilNextMeal()">Hitung</button>
+        <p id="result" style="margin-top: 10px;"></p>
+    </div>
+
+    <!-- Mengimpor Bootstrap dan jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function calculateTimeUntilNextMeal() {
+            // Mendapatkan waktu saat ini dari input
+            const currentTimeStr = document.getElementById("currentTime").value;
+
+            // Validasi waktu saat ini
+            const currentTimeRegex = /^(\d{1,2}:\d{2} [APap][mM])$/;
+            if (!currentTimeRegex.test(currentTimeStr)) {
+                alert("Format waktu tidak valid. Gunakan format hh:mm AM/PM.");
+                return;
+            }
+
+            // Parsing waktu saat ini
+            const currentTimeParts = currentTimeStr.split(" ");
+            const currentTime = new Date(`2000-01-01T${currentTimeParts[0]}:00`);
+
+            // Waktu makan Jake
+            const breakfastTime = new Date(`2000-01-01T07:00:00`);
+            const lunchTime = new Date(`2000-01-01T12:00:00`);
+            const dinnerTime = new Date(`2000-01-01T19:00:00`);
+
+            // Menentukan waktu makan berikutnya
+            let nextMeal = null;
+            if (currentTime < breakfastTime) {
+                nextMeal = breakfastTime;
+            } else if (currentTime < lunchTime) {
+                nextMeal = lunchTime;
+            } else if (currentTime < dinnerTime) {
+                nextMeal = dinnerTime;
+            } else {
+                nextMeal = new Date(breakfastTime.getTime() + 24 * 60 * 60 * 1000); // Makanan pagi besok
+            }
+
+            // Menghitung durasi waktu hingga makanan berikutnya
+            const timeDifference = nextMeal - currentTime;
+            const hours = Math.floor(timeDifference / (60 * 60 * 1000));
+            const minutes = Math.floor((timeDifference % (60 * 60 * 1000)) / (60 * 1000));
+
+            // Menampilkan hasil
+            const resultElement = document.getElementById("result");
+            resultElement.innerHTML = `Waktu hingga makan Jake berikutnya: ${hours} jam ${minutes} menit.`;
+        }
+    </script>
+</body>
+</html>
